@@ -13,6 +13,16 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        app()->bind(IssueCreator::class, Bitbucket::class);
+    }
+
+    /**
      * Bootstrap any application services.
      *
      * @return void
@@ -46,15 +56,5 @@ class AppServiceProvider extends ServiceProvider
                     echo {$data}->appends(array_except(request()->query(),['page']))->links();
                 } ?>";
         });
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        app()->bind(IssueCreator::class, Bitbucket::class);
     }
 }

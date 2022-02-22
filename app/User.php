@@ -4,23 +4,43 @@ namespace App;
 
 use App\Authenticatable\Admin;
 use App\Authenticatable\Assistant;
-use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property string name
  */
 class User extends Authenticatable
 {
+    use HasApiTokens;
+    use HasFactory;
     use Notifiable;
 
     protected $table = 'users';
 
     protected $guarded = ['admin', 'assistant'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     public function tickets()
@@ -47,7 +67,7 @@ class User extends Authenticatable
     public function teamsTickets()
     {
         return Ticket::join('memberships', 'tickets.team_id', '=', 'memberships.team_id')
-                       ->where('memberships.user_id', $this->id)->select('tickets.*');
+            ->where('memberships.user_id', $this->id)->select('tickets.*');
         //return $this->belongsToMany(Ticket::class, "memberships", "team_id", "team_id");
         //return $this->hasManyThrough(Ticket::class, Membership::class,"user_id","team_id")->with('requester','user','team');
     }
@@ -55,13 +75,13 @@ class User extends Authenticatable
     public function teamsLeads()
     {
         return Lead::join('memberships', 'leads.team_id', '=', 'memberships.team_id')
-                ->where('memberships.user_id', $this->id)->select('leads.*');
+            ->where('memberships.user_id', $this->id)->select('leads.*');
     }
 
     public function teamsMembers()
     {
-        return User::join('memberships', 'users.id', '=', 'memberships.user_id')
-                     ->whereIn('memberships.team_id', $this->teams->pluck('id'))->select('users.*');
+        return self::join('memberships', 'users.id', '=', 'memberships.user_id')
+            ->whereIn('memberships.team_id', $this->teams->pluck('id'))->select('users.*');
     }
 
     public function tasks()
