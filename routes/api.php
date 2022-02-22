@@ -1,22 +1,52 @@
 <?php
 
-Route::group(['namespace' => 'Api', 'middleware' => 'apiAuth'], function () {
-    Route::resource('tickets', 'TicketsController', ['except' => 'destroy']);
-    Route::post('tickets/{ticket}/comments', 'CommentsController@store');
-    Route::post('tickets/{ticket}/assign', 'TicketAssignController@store');
-    Route::post('users/create', 'UsersController@store');
-    Route::post('teams', 'TeamController@store');
-    Route::get('users', 'UsersController@index');
-    Route::get('teams/{team}/tickets', 'TeamTicketsController@index');
-    Route::get('teams/{team}/leads', 'TeamLeadsController@index');
+use App\Http\Controllers\Api\AgentController;
+use App\Http\Controllers\Api\AgentTicketCommentsController;
+use App\Http\Controllers\Api\CommentsController;
+use App\Http\Controllers\Api\IdeasController;
+use App\Http\Controllers\Api\LeadsController;
+use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\TeamLeadsController;
+use App\Http\Controllers\Api\TeamTicketsController;
+use App\Http\Controllers\Api\TicketAssignController;
+use App\Http\Controllers\Api\TicketsController;
+use App\Http\Controllers\Api\UsersController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
-    Route::resource('leads', 'LeadsController', ['only' => 'store']);
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
-    Route::resource('ideas', 'IdeasController', ['only' => ['store', 'index']]);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
 
-Route::post('agent/login', 'Api\AgentController@login');
-Route::group(['namespace' => 'Api', 'prefix' => 'agent', 'middleware' => 'apiAuthAgent'], function () {
-    Route::resource('tickets', 'AgentController', ['only' => 'index']);
-    Route::resource('tickets.comments', 'AgentTicketCommentsController', ['only' => ['index', 'store']]);
+Route::middleware('apiAuth')->group(function () {
+    Route::resource('tickets', TicketsController::class, ['except' => 'destroy']);
+    Route::post('tickets/{ticket}/comments', [CommentsController::class, 'store']);
+    Route::post('tickets/{ticket}/assign', [TicketAssignController::class, 'store']);
+    Route::post('users/create', [UsersController::class, 'store']);
+    Route::post('teams', [TeamController::class, 'store']);
+    Route::get('users', [UsersController::class, 'index']);
+    Route::get('teams/{team}/tickets', [TeamTicketsController::class, 'index']);
+    Route::get('teams/{team}/leads', [TeamLeadsController::class, 'index']);
+
+    Route::resource('leads', LeadsController::class, ['only' => 'store']);
+
+    Route::resource('ideas', IdeasController::class, ['only' => ['store', 'index']]);
+});
+
+Route::post('agent/login', [AgentController::class, 'login']);
+
+Route::prefix('agent')->middleware('apiAuthAgent')->group(function () {
+    Route::resource('tickets', AgentController::class, ['only' => 'index']);
+    Route::resource('tickets.comments', AgentTicketCommentsController::class, ['only' => ['index', 'store']]);
 });
