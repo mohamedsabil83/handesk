@@ -16,7 +16,7 @@ class TicketTest extends TestCase
 
    /** @test */
    public function can_attach_tags(){
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
         $ticket->attachTags([
             "tag1", "tag2", "tag1"
         ]);
@@ -25,21 +25,21 @@ class TicketTest extends TestCase
 
    /** @test */
    public function can_attach_tags_as_string(){
-       $ticket = factory(Ticket::class)->create();
+       $ticket = Ticket::factory()->create();
        $ticket->attachTags("hello,world,world");
        $this->assertCount(2, $ticket->tags);
    }
 
    /** @test */
    public function can_get_tags_string(){
-       $ticket = factory(Ticket::class)->create();
+       $ticket = Ticket::factory()->create();
        $ticket->attachTags(["hello","world"]);
        $this->assertEquals("hello,world", $ticket->tagsString());
    }
 
    /** @test */
    public function can_detach_a_tag(){
-       $ticket = factory(Ticket::class)->create();
+       $ticket = Ticket::factory()->create();
        $ticket->attachTags(["hello","world"]);
 
        $ticket->detachTag("world");
@@ -50,10 +50,10 @@ class TicketTest extends TestCase
    /** @test */
    public function adding_the_first_comment_assigns_the_ticket_to_the_user(){
        Notification::fake();
-       $user    = factory(User::class)->create();
-       $user2   = factory(User::class)->create();
+       $user    = User::factory()->create();
+       $user2   = User::factory()->create();
 
-       $ticket  = factory(Ticket::class)->create();
+       $ticket  = Ticket::factory()->create();
        $this->assertNull($ticket->fresh()->user);
 
        $ticket->addComment($user, "A comment");
@@ -65,7 +65,7 @@ class TicketTest extends TestCase
    /** @test */
    public function adding_a_comment_updates_ticket_timestamp(){
        Notification::fake();
-       $ticket  = factory(Ticket::class)->create(["updated_at" => Carbon::parse("-5 days")]);
+       $ticket  = Ticket::factory()->create(["updated_at" => Carbon::parse("-5 days")]);
 
        $ticket->addComment(null, "A comment");
 
@@ -75,8 +75,8 @@ class TicketTest extends TestCase
    /** @test */
    public function adding_an_empty_comment_just_changes_the_status(){
        Notification::fake();
-       $user    = factory(User::class)->create();
-       $ticket = factory(Ticket::class)->create(["status" => Ticket::STATUS_NEW]);
+       $user    = User::factory()->create();
+       $ticket = Ticket::factory()->create(["status" => Ticket::STATUS_NEW]);
 
        $ticket->addComment($user, null, Ticket::STATUS_SOLVED);
 
@@ -86,11 +86,11 @@ class TicketTest extends TestCase
 
    /** @test */
    public function can_merge_tickets(){
-       $user    = factory(User::class)->create();
+       $user    = User::factory()->create();
 
-       $ticket1 = factory(Ticket::class)->create(["status" => Ticket::STATUS_NEW]);
-       $ticket2 = factory(Ticket::class)->create(["status" => Ticket::STATUS_NEW]);
-       $ticket3 = factory(Ticket::class)->create(["status" => Ticket::STATUS_NEW]);
+       $ticket1 = Ticket::factory()->create(["status" => Ticket::STATUS_NEW]);
+       $ticket2 = Ticket::factory()->create(["status" => Ticket::STATUS_NEW]);
+       $ticket3 = Ticket::factory()->create(["status" => Ticket::STATUS_NEW]);
 
        $ticket1->merge($user,  [$ticket2->id, $ticket3] );
 
@@ -108,10 +108,10 @@ class TicketTest extends TestCase
 
    /** @test */
    public function merging_to_itself_is_not_merged(){
-       $user    = factory(User::class)->create();
+       $user    = User::factory()->create();
 
-       $ticket1 = factory(Ticket::class)->create(["status" => Ticket::STATUS_NEW]);
-       $ticket2 = factory(Ticket::class)->create(["status" => Ticket::STATUS_NEW]);
+       $ticket1 = Ticket::factory()->create(["status" => Ticket::STATUS_NEW]);
+       $ticket2 = Ticket::factory()->create(["status" => Ticket::STATUS_NEW]);
 
        $ticket1->merge($user,  [$ticket1->id, $ticket2] );
 
@@ -126,15 +126,15 @@ class TicketTest extends TestCase
 
    /** @test */
    public function adding_a_comment_when_escalated_it_is_added_as_a_note(){
-       $user    = factory(User::class)->create();
-       $ticket  = factory(Ticket::class)->create(["level" => 1]);
+       $user    = User::factory()->create();
+       $ticket  = Ticket::factory()->create(["level" => 1]);
        $comment = $ticket->addComment($user, "this is a comment");
        $this->assertTrue($comment->private);
    }
 
     /** @test */
     public function adding_a_requester_comment_when_escalated_it_is_not_added_as_a_note(){
-        $ticket  = factory(Ticket::class)->create(["level" => 1]);
+        $ticket  = Ticket::factory()->create(["level" => 1]);
         $comment = $ticket->addComment(null, "this is a comment");
 
         $this->assertFalse($comment->private == true);

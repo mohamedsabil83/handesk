@@ -28,8 +28,8 @@ class AgentsTest extends TestCase
     /** @test */
     public function admin_can_see_agents()
     {
-        $admin = factory(Admin::class)->create();
-        $agents = factory(User::class, 3)->create();
+        $admin = Admin::factory()->create();
+        $agents = User::factory()->count(3)->create();
         $response = $this->actingAs($admin)->get('users');
 
         $response->assertStatus(Response::HTTP_OK);
@@ -39,7 +39,7 @@ class AgentsTest extends TestCase
     /** @test */
     public function non_admin_can_not_see_agents()
     {
-        $nonAdmin= factory(User::class)->create();
+        $nonAdmin= User::factory()->create();
         $response = $this->actingAs($nonAdmin)->get('users');
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -48,13 +48,13 @@ class AgentsTest extends TestCase
     /** @test */
     public function can_delete_agent()
     {
-        $admin = factory(Admin::class)->create();
-        $agent = factory(User::class)->create();
+        $admin = Admin::factory()->create();
+        $agent = User::factory()->create();
         $agent->tickets()->create(
-          factory(Ticket::class)->make()->toArray()
+          Ticket::factory()->make()->toArray()
         );
         $agent->leads()->create(
-            factory(Lead::class)->make()->toArray()
+            Lead::factory()->make()->toArray()
         );
         $this->assertNotNull(Ticket::first()->user_id);
         $this->assertNotNull(Lead::first()->user_id);
@@ -70,8 +70,8 @@ class AgentsTest extends TestCase
     /** @test */
     public function non_admin_cannot_delete_agents()
     {
-        $nonAdmin = factory(User::class)->create();
-        $agent = factory(User::class)->create();
+        $nonAdmin = User::factory()->create();
+        $agent = User::factory()->create();
 
         $response = $this->actingAs($nonAdmin)->delete("users/{$agent->id}");
 

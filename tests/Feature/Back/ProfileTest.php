@@ -22,7 +22,7 @@ class ProfileTest extends TestCase
     {
         parent::setUp();
 
-        $this->actingAs($this->user = factory(User::class)->create());
+        $this->actingAs($this->user = User::factory()->create());
     }
 
     /** @test */

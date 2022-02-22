@@ -33,8 +33,8 @@ class BitbucketWebhookTest extends TestCase
         Notification::fake();
         $payload = $this->getPayload(929, "revo-pos/revo-app", 'resolved');
 
-        $this->actingAs(factory(Admin::class)->create());
-        $ticket = factory(Ticket::class)->create();
+        $this->actingAs(Admin::factory()->create());
+        $ticket = Ticket::factory()->create();
         $ticket->createIssue(new FakeIssueCreator(929), "revo-pos/revo-app");
         $this->assertCount(1, $ticket->fresh()->commentsAndNotes);
 
@@ -50,8 +50,8 @@ class BitbucketWebhookTest extends TestCase
       {
           $payload = $this->getPayload(929, "revo-pos/revo-app", 'open');
 
-          $this->actingAs(factory(Admin::class)->create());
-          $ticket = factory(Ticket::class)->create();
+          $this->actingAs(Admin::factory()->create());
+          $ticket = Ticket::factory()->create();
           $ticket->createIssue(new FakeIssueCreator(929), "revo-pos/revo-app");
           $this->assertCount(1, $ticket->fresh()->commentsAndNotes);
 
@@ -81,7 +81,7 @@ class BitbucketWebhookTest extends TestCase
            /** @test */
             public function can_update_idea_status_from_webhook()
             {
-                $idea = factory(Idea::class)->create([
+                $idea = Idea::factory()->create([
                     "repository" => "revo-pos/revo-app",
                     "issue_id" => 929,
                     "status" => Idea::STATUS_OPEN,
@@ -99,8 +99,8 @@ class BitbucketWebhookTest extends TestCase
             public function can_parse_a_null_comment()
             {
                 $payload = file_get_contents(base_path() . "/tests/Feature/Back/webhooks/null_content_webhook_payload.json");
-                $this->actingAs(factory(Admin::class)->create());
-                $ticket = factory(Ticket::class)->create();
+                $this->actingAs(Admin::factory()->create());
+                $ticket = Ticket::factory()->create();
                 $ticket->createIssue(new FakeIssueCreator(513), "revo-pos/revo-retail");
                 $this->assertCount(1, $ticket->fresh()->commentsAndNotes);
 

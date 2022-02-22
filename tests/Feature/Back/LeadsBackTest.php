@@ -21,8 +21,8 @@ class LeadsBackTest extends TestCase
     /** @test */
     public function admin_can_see_all_leads(){
         $this->withoutExceptionHandling();
-        $user = factory(User::class)->states('admin')->create();
-        factory(Lead::class)->create(["email" => "anEmail@email.com"]);
+        $user = User::factory()->tates('admin')->create();
+        Lead::factory()->create(["email" => "anEmail@email.com"]);
 
         $response = $this->actingAs($user)->get('leads');
 
@@ -33,14 +33,14 @@ class LeadsBackTest extends TestCase
 
     /** @test */
     public function non_admin_can_see_teams_leads(){
-        $user   = factory(User::class)->create();
-        $team   = factory(Team::class)->create();
+        $user   = User::factory()->create();
+        $team   = Team::factory()->create();
         $team->memberships()->create([
             "user_id" => $user->id
         ]);
 
-        factory(Lead::class)->create(["team_id" => $team->id, "email" => "anEmail@email.com"]);
-        factory(Lead::class)->create(["email" => "another@email.com"]);
+        Lead::factory()->create(["team_id" => $team->id, "email" => "anEmail@email.com"]);
+        Lead::factory()->create(["email" => "another@email.com"]);
 
         $response = $this->actingAs($user)->get('leads');
 
@@ -52,8 +52,8 @@ class LeadsBackTest extends TestCase
 
     /** @test */
     public function can_see_a_leads_detail(){
-        $user   = factory(User::class)->create();
-        $lead   = factory(Lead::class)->create(["email" => "another@email.com", "user_id" => $user->id]);
+        $user   = User::factory()->create();
+        $lead   = Lead::factory()->create(["email" => "another@email.com", "user_id" => $user->id]);
 
         $response = $this->actingAs($user)->get("leads/{$lead->id}");
 
@@ -62,8 +62,8 @@ class LeadsBackTest extends TestCase
 
     /** @test */
     public function can_not_see_a_lead_that_is_not_mine(){
-        $user   = factory(User::class)->create();
-        $lead   = factory(Lead::class)->create(["email" => "another@email.com"]);
+        $user   = User::factory()->create();
+        $lead   = Lead::factory()->create(["email" => "another@email.com"]);
 
         $response = $this->actingAs($user)->get("leads/{$lead->id}");
 
@@ -72,8 +72,8 @@ class LeadsBackTest extends TestCase
 
     /** @test */
     public function can_update_lead_status() {
-        $user   = factory(User::class)->states('admin')->create();
-        $lead   = factory(Lead::class)->create(["email" => "another@email.com", "status" => Lead::STATUS_NEW, "updated_at" => Carbon::parse("-2 days") ]);
+        $user   = User::factory()->tates('admin')->create();
+        $lead   = Lead::factory()->create(["email" => "another@email.com", "status" => Lead::STATUS_NEW, "updated_at" => Carbon::parse("-2 days") ]);
 
         $response = $this->actingAs($user)->post("leads/{$lead->id}/status", ["new_status" => Lead::STATUS_FIRST_CONTACT, "body" => "I've visited them"]);
 
@@ -90,8 +90,8 @@ class LeadsBackTest extends TestCase
 
     /** @test */
     public function can_update_a_lead(){
-        $user   = factory(User::class)->states('admin')->create();
-        $lead   = factory(Lead::class)->create(["email" => "another@email.com", "company" => "A company" ]);
+        $user   = User::factory()->tates('admin')->create();
+        $lead   = Lead::factory()->create(["email" => "another@email.com", "company" => "A company" ]);
 
         $response = $this->actingAs($user)->put("leads/{$lead->id}", ["email" => "new@email.com", "company" => "Another company"]);
 
@@ -103,9 +103,9 @@ class LeadsBackTest extends TestCase
     /** @test */
     public function can_assign_a_user_and_team(){
         Notification::fake();
-        $user   = factory(User::class)->states('admin')->create();
-        $team   = factory(Team::class)->create();
-        $lead   = factory(Lead::class)->create(["email" => "another@email.com", "company" => "A company" ]);
+        $user   = User::factory()->tates('admin')->create();
+        $team   = Team::factory()->create();
+        $lead   = Lead::factory()->create(["email" => "another@email.com", "company" => "A company" ]);
 
         $response = $this->actingAs($user)->post("leads/{$lead->id}/assign", ["user_id" => $user->id, "team_id" => $team->id]);
 
@@ -122,8 +122,8 @@ class LeadsBackTest extends TestCase
     /** @test */
     public function can_create_a_lead(){
         Notification::fake();
-        $user = factory(User::class)->create();
-        $team = factory(Team::class)->create();
+        $user = User::factory()->create();
+        $team = Team::factory()->create();
 
         $response = $this->actingAs($user)->post('leads',[
             "email" => "justin@biber.com",
@@ -147,8 +147,8 @@ class LeadsBackTest extends TestCase
 
     /** @test */
     public function can_not_create_a_duplicated_lead_email(){
-        $user = factory(User::class)->create();
-        factory(Lead::class)->create(["email" => "an_email@email.com", "phone" => "666777888"]);
+        $user = User::factory()->create();
+        Lead::factory()->create(["email" => "an_email@email.com", "phone" => "666777888"]);
 
         $response = $this->actingAs($user)->post('leads',[
             "email"   => "an_email@email.com",
@@ -162,8 +162,8 @@ class LeadsBackTest extends TestCase
 
     /** @test */
     public function can_not_create_a_duplicated_lead_phone(){
-        $user = factory(User::class)->create();
-        factory(Lead::class)->create(["email" => "an_email@email.com", "phone" => "666777888"]);
+        $user = User::factory()->create();
+        Lead::factory()->create(["email" => "an_email@email.com", "phone" => "666777888"]);
 
         $response = $this->actingAs($user)->post('leads',[
             "email"   => "another_email@email.com",

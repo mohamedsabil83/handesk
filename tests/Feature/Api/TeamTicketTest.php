@@ -53,7 +53,7 @@ class TeamTicketTest extends TestCase
     /** @test */
     public function can_create_a_ticket(){
         Notification::fake();
-        $team = factory(Team::class)->create();
+        $team = Team::factory()->create();
 
         $response = $this->post('api/tickets',[
             "requester"     => [
@@ -95,7 +95,7 @@ class TeamTicketTest extends TestCase
     public function a_ticket_created_without_team_notifies_the_default_setting(){
         Notification::fake();
 
-        $setting = factory(Settings::class)->create(["slack_webhook_url" => "http://fake-slack-webhook-url.com"]);
+        $setting = Settings::factory()->create(["slack_webhook_url" => "http://fake-slack-webhook-url.com"]);
 
         $response = $this->post('api/tickets',[
             "requester"     => [
@@ -125,11 +125,11 @@ class TeamTicketTest extends TestCase
      /** @test */
       public function can_get_open_team_tickets()
       {
-          $team = factory(Team::class)->create();
-          factory(Ticket::class, 1)->create(["team_id" => $team->id, "status" => Ticket::STATUS_SOLVED]);
-          factory(Ticket::class, 2)->create(["team_id" => $team->id, "status" => Ticket::STATUS_CLOSED]);
-          factory(Ticket::class, 3)->create(["team_id" => $team->id, "status" => Ticket::STATUS_OPEN]);
-          factory(Ticket::class, 4)->create(["team_id" => $team->id, "status" => Ticket::STATUS_NEW]);
+          $team = Team::factory()->create();
+          Ticket::factory()->count(1)->create(["team_id" => $team->id, "status" => Ticket::STATUS_SOLVED]);
+          Ticket::factory()->count(2)->create(["team_id" => $team->id, "status" => Ticket::STATUS_CLOSED]);
+          Ticket::factory()->count(3)->create(["team_id" => $team->id, "status" => Ticket::STATUS_OPEN]);
+          Ticket::factory()->count(4)->create(["team_id" => $team->id, "status" => Ticket::STATUS_NEW]);
 
           $response = $this->get("api/teams/{$team->id}/tickets",["token" => 'the-api-token']);
 
@@ -148,11 +148,11 @@ class TeamTicketTest extends TestCase
     /** @test */
     public function can_get_solved_team_tickets()
     {
-        $team = factory(Team::class)->create();
-        factory(Ticket::class, 1)->create(["team_id" => $team->id, "status" => Ticket::STATUS_SOLVED]);
-        factory(Ticket::class, 2)->create(["team_id" => $team->id, "status" => Ticket::STATUS_CLOSED]);
-        factory(Ticket::class, 3)->create(["team_id" => $team->id, "status" => Ticket::STATUS_OPEN]);
-        factory(Ticket::class, 4)->create(["team_id" => $team->id, "status" => Ticket::STATUS_NEW]);
+        $team = Team::factory()->create();
+        Ticket::factory()->count(1)->create(["team_id" => $team->id, "status" => Ticket::STATUS_SOLVED]);
+        Ticket::factory()->count(2)->create(["team_id" => $team->id, "status" => Ticket::STATUS_CLOSED]);
+        Ticket::factory()->count(3)->create(["team_id" => $team->id, "status" => Ticket::STATUS_OPEN]);
+        Ticket::factory()->count(4)->create(["team_id" => $team->id, "status" => Ticket::STATUS_NEW]);
 
         $response = $this->get("api/teams/{$team->id}/tickets?status=solved",["token" => 'the-api-token']);
 
@@ -171,11 +171,11 @@ class TeamTicketTest extends TestCase
     /** @test */
     public function can_get_open_tickets_count()
     {
-        $team = factory(Team::class)->create();
-        factory(Ticket::class, 1)->create(["team_id" => $team->id, "status" => Ticket::STATUS_SOLVED]);
-        factory(Ticket::class, 2)->create(["team_id" => $team->id, "status" => Ticket::STATUS_CLOSED]);
-        factory(Ticket::class, 3)->create(["team_id" => $team->id, "status" => Ticket::STATUS_OPEN]);
-        factory(Ticket::class, 4)->create(["team_id" => $team->id, "status" => Ticket::STATUS_NEW]);
+        $team = Team::factory()->create();
+        Ticket::factory()->count(1)->create(["team_id" => $team->id, "status" => Ticket::STATUS_SOLVED]);
+        Ticket::factory()->count(2)->create(["team_id" => $team->id, "status" => Ticket::STATUS_CLOSED]);
+        Ticket::factory()->count(3)->create(["team_id" => $team->id, "status" => Ticket::STATUS_OPEN]);
+        Ticket::factory()->count(4)->create(["team_id" => $team->id, "status" => Ticket::STATUS_NEW]);
 
         $response = $this->get("api/teams/{$team->id}/tickets?count=true",["token" => 'the-api-token']);
 
@@ -190,12 +190,12 @@ class TeamTicketTest extends TestCase
     /** @test */
     public function can_get_open_leads_count()
     {
-        $team = factory(Team::class)->create();
-        factory(Lead::class, 1)->create(["team_id" => $team->id, "status" => Lead::STATUS_NEW]);
-        factory(Lead::class, 2)->create(["team_id" => $team->id, "status" => Lead::STATUS_FIRST_CONTACT]);
-        factory(Lead::class, 3)->create(["team_id" => $team->id, "status" => Lead::STATUS_VISITED]);
-        factory(Lead::class, 4)->create(["team_id" => $team->id, "status" => Lead::STATUS_COMPLETED]);
-        factory(Lead::class, 4)->create(["team_id" => $team->id, "status" => Lead::STATUS_FAILED]);
+        $team = Team::factory()->create();
+        Lead::factory()->count(1)->create(["team_id" => $team->id, "status" => Lead::STATUS_NEW]);
+        Lead::factory()->count(2)->create(["team_id" => $team->id, "status" => Lead::STATUS_FIRST_CONTACT]);
+        Lead::factory()->count(3)->create(["team_id" => $team->id, "status" => Lead::STATUS_VISITED]);
+        Lead::factory()->count(4)->create(["team_id" => $team->id, "status" => Lead::STATUS_COMPLETED]);
+        Lead::factory()->count(4)->create(["team_id" => $team->id, "status" => Lead::STATUS_FAILED]);
 
         $response = $this->get("api/teams/{$team->id}/leads?count=true",["token" => 'the-api-token']);
 

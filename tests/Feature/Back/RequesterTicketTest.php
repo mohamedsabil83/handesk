@@ -17,7 +17,7 @@ class RequesterTicketTest extends TestCase
 
     /** @test */
     public function a_ticket_can_be_accessed_by_the_requester_with_ticket_public_token(){
-           factory(Ticket::class)->create(["title" => "A public request", "public_token" => "A_PUBLIC_TOKEN"]);
+           Ticket::factory()->create(["title" => "A public request", "public_token" => "A_PUBLIC_TOKEN"]);
 
            $response = $this->get("requester/tickets/A_PUBLIC_TOKEN");
 
@@ -28,9 +28,9 @@ class RequesterTicketTest extends TestCase
     /** @test */
     public function a_requester_can_comment_a_ticket(){
         Notification::fake();
-        $team = factory(Team::class)->create();
-        $user = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create(["public_token" => "A_PUBLIC_TOKEN", "team_id" => $team->id, "user_id" => $user->id]);
+        $team = Team::factory()->create();
+        $user = User::factory()->create();
+        $ticket = Ticket::factory()->create(["public_token" => "A_PUBLIC_TOKEN", "team_id" => $team->id, "user_id" => $user->id]);
 
         $response = $this->post("requester/tickets/A_PUBLIC_TOKEN/comments", ["body" => "new comment"]);
 
@@ -53,7 +53,7 @@ class RequesterTicketTest extends TestCase
     /** @test */
     public function a_requester_can_comment_and_solve_a_ticket(){
         Notification::fake();
-        $ticket = factory(Ticket::class)->create(["public_token" => "A_PUBLIC_TOKEN"]);
+        $ticket = Ticket::factory()->create(["public_token" => "A_PUBLIC_TOKEN"]);
 
         $response = $this->post("requester/tickets/A_PUBLIC_TOKEN/comments", ["body" => "new comment", "solved" => true]);
 
@@ -64,7 +64,7 @@ class RequesterTicketTest extends TestCase
 
     /** @test */
     public function a_requester_can_comment_and_reopen_a_ticket(){
-        $ticket = factory(Ticket::class)->create(["public_token" => "A_PUBLIC_TOKEN", "status" => Ticket::STATUS_SOLVED]);
+        $ticket = Ticket::factory()->create(["public_token" => "A_PUBLIC_TOKEN", "status" => Ticket::STATUS_SOLVED]);
 
         $response = $this->post("requester/tickets/A_PUBLIC_TOKEN/comments", ["body" => "new comment", "reopen" => true]);
 

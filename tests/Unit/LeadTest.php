@@ -12,7 +12,7 @@ class LeadTest extends TestCase
 
     /** @test */
     public function can_subscribe_to_mailchimp(){
-        $lead = factory(Lead::class)->create();
+        $lead = Lead::factory()->create();
         $lead->attachTags(["xef","retail","another tag","even another tag"]);
 
         $lists = $lead->getSubscribableLists();

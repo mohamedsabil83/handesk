@@ -18,8 +18,8 @@ class TicketIdeaTest extends TestCase
       public function can_create_idea_from_ticket()
       {
         Notification::fake();
-        $user = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create([
+        $user = User::factory()->create();
+        $ticket = Ticket::factory()->create([
             "status" => Ticket::STATUS_OPEN,
             "body" => "An english body to make sure it is parsed as english"
         ]);
@@ -40,8 +40,8 @@ class TicketIdeaTest extends TestCase
     public function can_not_create_idea_twice_from_ticket()
     {
         Notification::fake();
-        $user = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user = User::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/idea");
         $response->assertStatus( Response::HTTP_FOUND );
@@ -54,8 +54,8 @@ class TicketIdeaTest extends TestCase
     public function the_idea_created_text_uses_the_ticket_language()
     {
         Notification::fake();
-        $user = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create([
+        $user = User::factory()->create();
+        $ticket = Ticket::factory()->create([
             "status" => Ticket::STATUS_OPEN,
             "body" => "Aquest es un comentari en català per veure que el detector d'idioma funciona"
         ]);

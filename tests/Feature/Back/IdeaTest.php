@@ -25,8 +25,8 @@ class IdeaTest extends TestCase
 
     /** @test */
     public function can_see_ideas(){
-        $user = factory(User::class)->create(["admin" => true]);
-        factory(Idea::class)->create(["status" => Idea::STATUS_NEW]);
+        $user = User::factory()->create(["admin" => true]);
+        Idea::factory()->create(["status" => Idea::STATUS_NEW]);
 
         $response = $this->actingAs($user)->get('ideas?pending=true');
 
@@ -37,8 +37,8 @@ class IdeaTest extends TestCase
     /** @test */
     public function can_show_an_idea(){
         $this->withoutExceptionHandling();
-        $user = factory(User::class)->create(["admin" => true]);
-        $idea = factory(Idea::class)->create();
+        $user = User::factory()->create(["admin" => true]);
+        $idea = Idea::factory()->create();
 
         $response = $this->actingAs($user)->get("ideas/{$idea->id}");
 
@@ -48,8 +48,8 @@ class IdeaTest extends TestCase
 
     /** @test */
     public function can_add_a_tag(){
-        $user = factory(User::class)->create(["admin" => true]);
-        $idea = factory(Idea::class)->create();
+        $user = User::factory()->create(["admin" => true]);
+        $idea = Idea::factory()->create();
 
         $response = $this->actingAs($user)->post("ideas/{$idea->id}/tags", ["tag" => "Hello world"]);
 
@@ -59,8 +59,8 @@ class IdeaTest extends TestCase
 
     /** @test */
     public function can_detach_a_tag(){
-        $user   = factory(User::class)->create(["admin" => true]);
-        $idea = factory(Idea::class)->create();
+        $user   = User::factory()->create(["admin" => true]);
+        $idea = Idea::factory()->create();
         $idea->attachTags(["hello","world"]);
         $this->assertCount(2, $idea->tags);
 
@@ -73,7 +73,7 @@ class IdeaTest extends TestCase
     /** @test */
     public function can_create_an_idea(){
         Notification::fake();
-        $user = factory(Admin::class)->create();
+        $user = Admin::factory()->create();
 
         $response = $this->actingAs($user)->post('ideas',[
             "requester" => ["name" => "Justin", "email" => "justin@biber.com"],
@@ -84,7 +84,7 @@ class IdeaTest extends TestCase
             "sales_impact" => 5,
             "current_impact" => 3,
         ]);
-        
+
         $response->assertStatus(Response::HTTP_FOUND);
         $this->assertEquals(1, Idea::count());
         tap(Idea::first(), function($idea){

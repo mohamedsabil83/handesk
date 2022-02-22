@@ -14,9 +14,9 @@ class TeamTest extends TestCase
 
     /** @test */
     public function admin_can_see_all_teams(){
-        $user = factory(User::class)->states("admin")->create();
-        $user->teams()->attach( factory(Team::class)->create(["name" => "Awesome team"]) );
-        factory(Team::class)->create(["name" => "Impressive team"]);
+        $user = User::factory()->tates("admin")->create();
+        $user->teams()->attach( Team::factory()->create(["name" => "Awesome team"]) );
+        Team::factory()->create(["name" => "Impressive team"]);
 
         $response = $this->actingAs($user)->get('teams');
 
@@ -27,9 +27,9 @@ class TeamTest extends TestCase
 
     /** @test */
     public function non_admin_can_see_only_his_teams(){
-        $user = factory(User::class)->create();
-        $user->teams()->attach( factory(Team::class)->create(["name" => "Awesome team"]) );
-        factory(Team::class)->create(["name" => "Impressive team"]);
+        $user = User::factory()->create();
+        $user->teams()->attach( Team::factory()->create(["name" => "Awesome team"]) );
+        Team::factory()->create(["name" => "Impressive team"]);
 
         $response = $this->actingAs($user)->get('teams');
 
@@ -40,8 +40,8 @@ class TeamTest extends TestCase
 
     /** @test */
     public function an_user_can_see_the_join_page(){
-        $user = factory(User::class)->create();
-        factory(Team::class)->create(["token" => "A_TOKEN"]);
+        $user = User::factory()->create();
+        Team::factory()->create(["token" => "A_TOKEN"]);
 
         $response = $this->actingAs($user)->get('teams/A_TOKEN/join');
 
@@ -51,8 +51,8 @@ class TeamTest extends TestCase
 
     /** @test */
     public function an_user_can_join_team_with_its_public_url(){
-        $user = factory(User::class)->create();
-        $team = factory(Team::class)->create(["token" => "A_TOKEN"]);
+        $user = User::factory()->create();
+        $team = Team::factory()->create(["token" => "A_TOKEN"]);
 
         $response = $this->actingAs($user)->post('teams/A_TOKEN/join');
 
@@ -62,8 +62,8 @@ class TeamTest extends TestCase
 
     /** @test */
     public function a_user_can_only_be_joined_once(){
-        $user = factory(User::class)->create();
-        $team = factory(Team::class)->create(["token" => "A_TOKEN"]);
+        $user = User::factory()->create();
+        $team = Team::factory()->create(["token" => "A_TOKEN"]);
         $team->members()->attach($user);
 
         $response = $this->actingAs($user)->post('teams/A_TOKEN/join');
@@ -74,7 +74,7 @@ class TeamTest extends TestCase
 
     /** @test */
     public function admin_can_create_teams(){
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->tates('admin')->create();
 
         $response = $this->actingAs($user)->post('teams', [
             "name" => "Awesome team",
@@ -92,7 +92,7 @@ class TeamTest extends TestCase
 
     /** @test */
     public function non_admin_can_not_create_teams(){
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('teams', [
             "name" => "Awesome team",
@@ -106,9 +106,9 @@ class TeamTest extends TestCase
 
     /** @test */
     public function can_see_team_agents(){
-        $team  = factory(Team::class)->create();
-        $user1 = factory(User::class)->create(["name" => "User 1"]);
-        $user2 = factory(User::class)->create(["name" => "User 2"]);
+        $team  = Team::factory()->create();
+        $user1 = User::factory()->create(["name" => "User 1"]);
+        $user2 = User::factory()->create(["name" => "User 2"]);
         $team->members()->attach( $user1 );
         $team->members()->attach( $user2 );
 

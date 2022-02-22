@@ -14,15 +14,15 @@ class CloseSolvedTicketsTest extends TestCase
 
     /** @test */
     public function a_ticket_solved_before_threshold_is_closed(){
-        $ticket1 = factory(Ticket::class)->create([
+        $ticket1 = Ticket::factory()->create([
             "created_at" => Carbon::parse("-1 days"),
             "status"     => Ticket::STATUS_SOLVED
         ]);
-        $ticket2 = factory(Ticket::class)->create([
+        $ticket2 = Ticket::factory()->create([
             "created_at" => Carbon::parse("-5 days"),
             "status"     => Ticket::STATUS_SOLVED
         ]);
-        $ticket3 = factory(Ticket::class)->create([
+        $ticket3 = Ticket::factory()->create([
             "created_at" => Carbon::parse("-5 days"),
             "status"     => Ticket::STATUS_NEW
         ]);

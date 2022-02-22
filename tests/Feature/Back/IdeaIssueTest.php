@@ -35,8 +35,8 @@ class IdeaIssueTest extends TestCase
     /** @test */
     public function can_create_issue_from_idea(){
         Notification::fake();
-        $user   = factory(Admin::class)->create();
-        $idea = factory(Idea::class)->create([
+        $user   = Admin::factory()->create();
+        $idea = Idea::factory()->create([
             "repository" => "test/repo"
         ]);
 
@@ -50,8 +50,8 @@ class IdeaIssueTest extends TestCase
 
     /** @test */
     public function non_admin_cannot_create_issue_from_ticket(){
-        $user   = factory(User::class)->create();
-        $idea = factory(Idea::class)->create([
+        $user   = User::factory()->create();
+        $idea = Idea::factory()->create([
             "repository" => "fake/repo"
         ]);
 
@@ -63,8 +63,8 @@ class IdeaIssueTest extends TestCase
     /** @test */
     public function issue_can_not_be_created_twice(){
         Notification::fake();
-        $user   = factory(Admin::class)->create();
-        $idea = factory(Idea::class)->create([
+        $user   = Admin::factory()->create();
+        $idea = Idea::factory()->create([
             "repository" => "fake/repo",
             "issue_id" => 10
         ]);

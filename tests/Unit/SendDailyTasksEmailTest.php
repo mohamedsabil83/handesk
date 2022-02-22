@@ -22,16 +22,16 @@ class SendDailyTasksEmailTest extends TestCase
 
         Mail::fake();
 
-        $user1 = factory( User::class )->create();
-        $user2 = factory( User::class )->create();
-        $user3 = factory( User::class )->create();
-        $user4 = factory( User::class )->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $user3 = User::factory()->create();
+        $user4 = User::factory()->create();
 
         $user1->settings()->updateOrCreate([], ["daily_tasks_notification" => true]);
         $user2->settings()->updateOrCreate([], ["daily_tasks_notification" => true]);
         $user3->settings()->updateOrCreate([], ["daily_tasks_notification" => false]);
 
-        $lead = factory(Lead::class)->create();
+        $lead = Lead::factory()->create();
         $task1 = $lead->tasks()->create(["user_id" => $user1->id, "datetime" => Carbon::today(),                         "body" => "Sample task"]);
         $task2 = $lead->tasks()->create(["user_id" => $user1->id, "datetime" => Carbon::today(), "completed" => true,    "body" => "Should not be sent"]);
         $task3 = $lead->tasks()->create(["user_id" => $user1->id, "datetime" => Carbon::yesterday(),                     "body" => "Should be sent"]);

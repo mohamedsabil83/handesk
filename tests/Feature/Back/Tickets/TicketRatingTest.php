@@ -22,7 +22,7 @@ class TicketRatingTest extends TestCase
     public function can_rate_a_ticket_when_close()
     {
         Notification::fake();
-        $ticket = factory(Ticket::class)->states(['closed'])->create(["public_token" => "TOKEN"]);
+        $ticket = Ticket::factory()->states(['closed'])->create(["public_token" => "TOKEN"]);
         $response = $this->get("requester/tickets/TOKEN/rate?rating=3");
 
         $response->assertStatus(Response::HTTP_OK);
@@ -33,7 +33,7 @@ class TicketRatingTest extends TestCase
     public function can_not_rate_a_ticket_without_a_rating()
     {
         Notification::fake();
-        $ticket = factory(Ticket::class)->states(['closed'])->create(["public_token" => "TOKEN"]);
+        $ticket = Ticket::factory()->states(['closed'])->create(["public_token" => "TOKEN"]);
         $response = $this->get("requester/tickets/TOKEN/rate");
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -44,7 +44,7 @@ class TicketRatingTest extends TestCase
     public function can_not_rate_a_ticket_when_not_closed()
     {
         Notification::fake();
-        $ticket = factory(Ticket::class)->create(["status" => Ticket::STATUS_OPEN, "public_token" => "TOKEN"]);
+        $ticket = Ticket::factory()->create(["status" => Ticket::STATUS_OPEN, "public_token" => "TOKEN"]);
         $response = $this->get("requester/tickets/TOKEN/rate?rating=2");
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -54,9 +54,9 @@ class TicketRatingTest extends TestCase
     /** @test */
     public function notification_is_sent_when_a_ticket_is_rated(){
         Notification::fake();
-        $admin = factory(Admin::class)->create();
-        $user = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->states(['closed'])->create(["public_token" => "TOKEN", 'user_id' => $user->id]);
+        $admin = Admin::factory()->create();
+        $user = User::factory()->create();
+        $ticket = Ticket::factory()->states(['closed'])->create(["public_token" => "TOKEN", 'user_id' => $user->id]);
         $response = $this->get("requester/tickets/TOKEN/rate?rating=3");
 
         $response->assertStatus(Response::HTTP_OK);
@@ -70,7 +70,7 @@ class TicketRatingTest extends TestCase
 
     /** @test */
     public function can_not_rate_a_ticket_when_already_rated(){
-        $ticket = factory(Ticket::class)->states(['closed'])->create(["public_token" => "TOKEN", "rating" => 2]);
+        $ticket = Ticket::factory()->states(['closed'])->create(["public_token" => "TOKEN", "rating" => 2]);
         $response = $this->get("requester/tickets/TOKEN/rate?rating=3");
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -82,9 +82,9 @@ class TicketRatingTest extends TestCase
     public function the_rating_email_is_sent_when_order_closed_and_not_rated()
     {
         Notification::fake();
-        $requester = factory(Requester::class)->create();
-        $user = factory(Admin::class)->create();
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id, "public_token" => "TOKEN"]);
+        $requester = Requester::factory()->create();
+        $user = Admin::factory()->create();
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id, "public_token" => "TOKEN"]);
 
         $this->actingAs($user);
         $ticket->updateStatus(Ticket::STATUS_SOLVED);
@@ -100,9 +100,9 @@ class TicketRatingTest extends TestCase
     public function the_rating_email_is_not_sent_when_order_closed_and_rated()
     {
         Notification::fake();
-        $requester = factory(Requester::class)->create();
-        $user = factory(Admin::class)->create();
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id, "public_token" => "TOKEN", "rating" => 2]);
+        $requester = Requester::factory()->create();
+        $user = Admin::factory()->create();
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id, "public_token" => "TOKEN", "rating" => 2]);
 
         $this->actingAs($user);
         $ticket->updateStatus(Ticket::STATUS_SOLVED);
@@ -117,11 +117,11 @@ class TicketRatingTest extends TestCase
     /** @test */
     public function it_updates_kpi(){
         Notification::fake();
-        $user = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->states(['closed'])->create(["public_token" => "TOKEN", 'user_id' => $user->id]);
+        $user = User::factory()->create();
+        $ticket = Ticket::factory()->states(['closed'])->create(["public_token" => "TOKEN", 'user_id' => $user->id]);
         $response = $this->get("requester/tickets/TOKEN/rate?rating=3");
 
-        $ticket = factory(Ticket::class)->states(['closed'])->create(["public_token" => "TOKEN2", 'user_id' => $user->id]);
+        $ticket = Ticket::factory()->states(['closed'])->create(["public_token" => "TOKEN2", 'user_id' => $user->id]);
         $response = $this->get("requester/tickets/TOKEN2/rate?rating=2");
 
         $response->assertStatus(Response::HTTP_OK);

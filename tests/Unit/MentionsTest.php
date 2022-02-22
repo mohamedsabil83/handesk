@@ -24,9 +24,9 @@ class MentionsTest extends TestCase
        /** @test */
         public function does_find_users_mentioned()
         {
-            factory(User::class)->create(["name" => "WithCapitalLetters"]);
-            factory(User::class)->create(["name" => "with spaces"]);
-            factory(User::class)->create(["name" => "WithÁcents"]);
+            User::factory()->create(["name" => "WithCapitalLetters"]);
+            User::factory()->create(["name" => "with spaces"]);
+            User::factory()->create(["name" => "WithÁcents"]);
 
             $users = Mentions::findUsersFor(["WithCapitalLetters", "with_spaces", "non_existing", "WithÁcents"]); //Sqlite differenciates capital than non capital while mysql does not
             $this->assertCount(3, $users);

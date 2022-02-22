@@ -38,8 +38,8 @@ class IdeasApiTest extends TestCase
 
     /** @test */
     public function can_create_an_idea(){
-        $admin      = factory(Admin::class)->create();
-        $nonAdmin   = factory(User::class)->create(["admin" => 0]);
+        $admin      = Admin::factory()->create();
+        $nonAdmin   = User::factory()->create(["admin" => 0]);
 
         $response = $this->post('api/ideas',[
             "requester" => [
@@ -143,7 +143,7 @@ class IdeasApiTest extends TestCase
     public function creating_a_ticket_of_a_requester_without_email_does_not_use_another_requester_without_email(){
         Notification::fake();
 
-        factory(Requester::class)->create(["name" => "First requester", "email" => null]);
+        Requester::factory()->create(["name" => "First requester", "email" => null]);
         $response = $this->post('api/ideas',[
             "requester" => [
                 "name"  => "Second Requester",
@@ -163,10 +163,10 @@ class IdeasApiTest extends TestCase
 
     /** @test */
     public function can_get_ideas_tickets(){
-        $requester = factory(Requester::class)->create(["name" => "requesterName" ]);
-        factory(Idea::class,3)->create(["requester_id" => $requester->id]);
-        factory(Idea::class,2)->create(["requester_id" => $requester->id, "status" => Idea::STATUS_CLOSED]);
-        factory(Idea::class,2)->create();
+        $requester = Requester::factory()->create(["name" => "requesterName" ]);
+        Idea::factory()->count(3)->create(["requester_id" => $requester->id]);
+        Idea::factory()->count(2)->create(["requester_id" => $requester->id, "status" => Idea::STATUS_CLOSED]);
+        Idea::factory()->count(2)->create();
 
         $response = $this->get("api/ideas?requester=requesterName",["token" => 'the-api-token']);
 

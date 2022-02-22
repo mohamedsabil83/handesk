@@ -18,14 +18,14 @@ class TicketEventsTest extends TestCase
 
     public function setUp() : void{
         parent::setup();
-        $this->agent = factory(User::class)->create();
+        $this->agent = User::factory()->create();
         $this->actingAs($this->agent);
         Notification::fake();
     }
 
     /** @test */
     public function escalating_a_ticket_creates_a_ticket_event(){
-            $ticket = factory(Ticket::class)->create();
+            $ticket = Ticket::factory()->create();
             $ticket->setLevel(1);
 
             $this->assertCount(1, $ticket->fresh()->events);
@@ -37,7 +37,7 @@ class TicketEventsTest extends TestCase
 
     /** @test */
     public function deescalating_a_ticket_creates_a_ticket_event(){
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
         $ticket->setLevel(0);
 
         $this->assertCount(1, $ticket->fresh()->events);
@@ -49,9 +49,9 @@ class TicketEventsTest extends TestCase
 
     /** @test */
     public function assigning_a_ticket_to_an_agent_creates_a_ticket_event(){
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
 
-        $ticket->assignTo( factory(User::class)->create(["name" => "agent 2"]) );
+        $ticket->assignTo( User::factory()->create(["name" => "agent 2"]) );
 
         $this->assertCount(1, $ticket->fresh()->events);
         tap($ticket->fresh()->events->first(), function($event){
@@ -62,9 +62,9 @@ class TicketEventsTest extends TestCase
 
     /** @test */
     public function assigning_a_ticket_to_a_team_creates_a_ticket_event(){
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
 
-        $ticket->assignToTeam( factory(Team::class)->create(["name" => "awesome team"]) );
+        $ticket->assignToTeam( Team::factory()->create(["name" => "awesome team"]) );
 
         $this->assertCount(1, $ticket->fresh()->events);
         tap($ticket->fresh()->events->first(), function($event){
@@ -75,7 +75,7 @@ class TicketEventsTest extends TestCase
 
     /** @test */
     public function creating_ticket_issue_creates_a_ticket_event(){
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
 
         $ticket->createIssue( new FakeIssueCreator, 'fake/repo' );
 
@@ -88,7 +88,7 @@ class TicketEventsTest extends TestCase
 
     /** @test */
     public function changing_ticket_status_creates_an_event(){
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
 
         $ticket->updateStatus(Ticket::STATUS_CLOSED);
 

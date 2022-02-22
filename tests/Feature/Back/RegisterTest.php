@@ -14,7 +14,7 @@ class RegisterTest extends TestCase{
 
     /** @test */
     public function a_user_can_register(){
-        $team = factory(Team::class)->create(["token" => "TEAMTOKEN"]);
+        $team = Team::factory()->create(["token" => "TEAMTOKEN"]);
 
         $response = $this->post('register', [
             "name"                  => "Peter parker",

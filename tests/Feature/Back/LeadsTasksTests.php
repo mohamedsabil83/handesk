@@ -19,8 +19,8 @@ class LeadsTasksTest extends TestCase
 
     /** @test */
     public function can_create_a_task(){
-        $user = factory(User::class)->create();
-        $lead = factory(Lead::class)->create();
+        $user = User::factory()->create();
+        $lead = Lead::factory()->create();
 
         $response = $this->actingAs($user)->post("leads/{$lead->id}/tasks",["body" => "My first task"] );
 
@@ -36,8 +36,8 @@ class LeadsTasksTest extends TestCase
 
     /** @test */
     public function can_complete_a_task(){
-        $user = factory(User::class)->create();
-        $task = factory(Task::class)->create();
+        $user = User::factory()->create();
+        $task = Task::factory()->create();
         $this->assertFalse((bool)$task->completed);
 
         $response = $this->actingAs($user)->put("tasks/{$task->id}",["completed" => true] );

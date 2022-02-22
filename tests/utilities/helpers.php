@@ -8,5 +8,5 @@
  */
 function create($class, $attributes = [], $times = 1)
 {
-    return factory($class)->times($times)->create($attributes);
+    return $class::factory()->count($times)->create($attributes);
 }

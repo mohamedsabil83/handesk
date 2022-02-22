@@ -24,8 +24,8 @@ class TicketTest extends TestCase
 
     /** @test */
     public function can_see_tickets(){
-        $user = factory(User::class)->create(["admin" => true]);
-        $user->tickets()->create(factory(Ticket::class)->make()->toArray());
+        $user = User::factory()->create(["admin" => true]);
+        $user->tickets()->create(Ticket::factory()->make()->toArray());
 
         $response = $this->actingAs($user)->get('tickets');
 
@@ -35,8 +35,8 @@ class TicketTest extends TestCase
 
     /** @test */
     public function can_show_a_ticket_assigned_to_me(){
-        $user = factory(User::class)->create();
-        $user->tickets()->create(factory(Ticket::class)->make()->toArray());
+        $user = User::factory()->create();
+        $user->tickets()->create(Ticket::factory()->make()->toArray());
         $ticket = $user->tickets->first();
 
         $response = $this->actingAs($user)->get("tickets/{$ticket->id}");
@@ -47,13 +47,13 @@ class TicketTest extends TestCase
 
     /** @test */
     public function user_can_see_team_ticket(){
-        $user   = factory(User::class)->create();
-        $team   = factory(Team::class)->create();
+        $user   = User::factory()->create();
+        $team   = Team::factory()->create();
         $team->memberships()->create([
             "user_id" => $user->id
         ]);
         $ticket = $team->tickets()->create(
-            factory(Ticket::class)->make()->toArray()
+            Ticket::factory()->make()->toArray()
         );
 
         $response = $this->actingAs($user)->get("tickets/{$ticket->id}");
@@ -64,8 +64,8 @@ class TicketTest extends TestCase
 
     /** @test */
     public function user_can_not_see_non_team_ticket(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->get("tickets/{$ticket->id}");
 
@@ -74,8 +74,8 @@ class TicketTest extends TestCase
 
     /** @test */
     public function admin_can_see_non_team_ticket(){
-        $user   = factory(User::class)->create(["admin" => true]);
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create(["admin" => true]);
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->get("tickets/{$ticket->id}");
 
@@ -86,9 +86,9 @@ class TicketTest extends TestCase
     /** @test */
     public function can_add_a_comment(){
         Notification::fake();
-        $user   = factory(User::class)->create();
-        $team   = factory(Team::class)->create();
-        $ticket = factory(Ticket::class)->create(["user_id" => $user->id, "team_id" => $team->id]);
+        $user   = User::factory()->create();
+        $team   = Team::factory()->create();
+        $ticket = Ticket::factory()->create(["user_id" => $user->id, "team_id" => $team->id]);
         $this->assertCount(0, $ticket->comments);
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/comments",["body" => "This is my comment"]);
@@ -113,9 +113,9 @@ class TicketTest extends TestCase
     /** @test */
     public function can_comment_a_ticket_with_a_private_note(){
         Notification::fake();
-        $user   = factory(User::class)->create();
-        $team   = factory(Team::class)->create();
-        $ticket = factory(Ticket::class)->create(["user_id" => $user->id, "team_id" => $team->id]);
+        $user   = User::factory()->create();
+        $team   = Team::factory()->create();
+        $ticket = Ticket::factory()->create(["user_id" => $user->id, "team_id" => $team->id]);
         $this->assertCount(0, $ticket->comments);
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/comments",["body" => "This is my comment", "private" => true]);
@@ -129,9 +129,9 @@ class TicketTest extends TestCase
     /** @test */
     public function can_assign_a_ticket_to_a_team(){
         Notification::fake();
-        $user   = factory(User::class)->create(["admin" => true]);
-        $team   = factory(Team::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create(["admin" => true]);
+        $team   = Team::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/assign",["team_id" => $team->id]);
 
@@ -142,9 +142,9 @@ class TicketTest extends TestCase
     /** @test */
     public function can_assign_a_ticket_to_a_user(){
         Notification::fake();
-        $user   = factory(User::class)->create(["admin" => true]);
-        $user2  = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create(["admin" => true]);
+        $user2  = User::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/assign",["user_id" => $user2->id]);
 
@@ -155,10 +155,10 @@ class TicketTest extends TestCase
     /** @test */
     public function can_assign_a_ticket_to_a_user_and_team(){
         Notification::fake();
-        $user   = factory(User::class)->create(["admin" => true]);
-        $user2  = factory(User::class)->create();
-        $team   = factory(Team::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create(["admin" => true]);
+        $user2  = User::factory()->create();
+        $team   = Team::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/assign",[
             "user_id" => $user2->id,
@@ -172,8 +172,8 @@ class TicketTest extends TestCase
 
     /** @test */
     public function can_add_a_tag(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/tags", ["tag" => "Hello world"]);
 
@@ -183,8 +183,8 @@ class TicketTest extends TestCase
 
     /** @test */
     public function can_detach_a_tag(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create();
         $ticket->attachTags(["hello","world"]);
         $this->assertCount(2, $ticket->tags);
 
@@ -197,8 +197,8 @@ class TicketTest extends TestCase
     /** @test */
     public function can_create_a_ticket(){
         Notification::fake();
-        $user = factory(User::class)->create();
-        $team = factory(Team::class)->create();
+        $user = User::factory()->create();
+        $team = Team::factory()->create();
 
         $response = $this->actingAs($user)->post('tickets',[
             "requester" => ["name" => "Justin", "email" => "justin@biber.com"],
@@ -208,7 +208,7 @@ class TicketTest extends TestCase
             "status" => Ticket::STATUS_OPEN,
             "team_id" => $team->id,
         ]);
-        
+
         $response->assertStatus(Response::HTTP_FOUND);
         $this->assertEquals(1, Ticket::count());
         tap(Ticket::first(), function($ticket) use($team){
@@ -226,8 +226,8 @@ class TicketTest extends TestCase
     /** @test */
     public function can_merge_tickets(){
         Notification::fake();
-        $user    = factory(User::class)->states(['admin'])->create();
-        $tickets = factory(Ticket::class, 4)->create();
+        $user    = User::factory()->states(['admin'])->create();
+        $tickets = Ticket::factory()->count(4)->create();
 
         $this->actingAs($user);
         request()->merge(['ticket_id' => 1]);
@@ -240,9 +240,9 @@ class TicketTest extends TestCase
     /** @test */
     public function can_escalate_a_ticket(){
         Notification::fake();
-        $user        = factory(User::class)->create();
-        $assistant   = factory(Assistant::class)->create();
-        $ticket      = factory(Ticket::class)->create();
+        $user        = User::factory()->create();
+        $assistant   = Assistant::factory()->create();
+        $ticket      = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/escalate");
 
@@ -260,8 +260,8 @@ class TicketTest extends TestCase
 
     /** @test */
     public function can_unescalate_ticket(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create(["level" => 1]);
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create(["level" => 1]);
 
         $response = $this->actingAs($user)->delete("tickets/{$ticket->id}/escalate");
 

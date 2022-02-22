@@ -14,11 +14,11 @@ class UserTest extends TestCase
 
     /** @test */
     public function a_user_can_see_its_team_tickets(){
-        $user       = factory(User::class)  ->create();
-        $teams      = factory(Team::class,3)->create();
-        $ticket1    = $teams[0]->tickets()->create( factory(Ticket::class)->make()->toArray() );
-        $ticket2    = $teams[1]->tickets()->create( factory(Ticket::class)->make()->toArray() );
-        $ticket3    = $teams[2]->tickets()->create( factory(Ticket::class)->make()->toArray() );
+        $user       = User::factory()->create();
+        $teams      = Team::factory()->count(3)->create();
+        $ticket1    = $teams[0]->tickets()->create( Ticket::factory()->make()->toArray() );
+        $ticket2    = $teams[1]->tickets()->create( Ticket::factory()->make()->toArray() );
+        $ticket3    = $teams[2]->tickets()->create( Ticket::factory()->make()->toArray() );
 
         $teams[0]->members()->attach($user);
         $teams[1]->members()->attach($user);

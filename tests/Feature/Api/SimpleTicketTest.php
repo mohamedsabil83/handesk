@@ -39,8 +39,8 @@ class SimpleTicketTest extends TestCase
     /** @test */
     public function can_create_a_ticket(){
         Notification::fake();
-        $admin      = factory(Admin::class)->create();
-        $nonAdmin   = factory(User::class)->create(["admin" => 0]);
+        $admin      = Admin::factory()->create();
+        $nonAdmin   = User::factory()->create(["admin" => 0]);
 
         $response = $this->post('api/tickets',[
             "requester" => [
@@ -84,8 +84,8 @@ class SimpleTicketTest extends TestCase
     /** @test */
     public function can_create_a_ticket_with_js_injection(){
         Notification::fake();
-        $admin      = factory(Admin::class)->create();
-        $nonAdmin   = factory(User::class)->create(["admin" => 0]);
+        $admin      = Admin::factory()->create();
+        $nonAdmin   = User::factory()->create(["admin" => 0]);
 
         $response = $this->post('api/tickets',[
             "requester" => [
@@ -171,7 +171,7 @@ class SimpleTicketTest extends TestCase
     public function creating_a_ticket_of_a_requester_without_email_does_not_use_another_requester_without_email(){
         Notification::fake();
 
-        factory(Requester::class)->create(["name" => "First requester", "email" => null]);
+        Requester::factory()->create(["name" => "First requester", "email" => null]);
         $response = $this->post('api/tickets',[
             "requester" => [
                 "name"  => "Second Requester",
@@ -192,7 +192,7 @@ class SimpleTicketTest extends TestCase
     /** @test */
     public function requester_can_comment_the_ticket(){
         Notification::fake();
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
         $ticket->comments()->create(["body" => "first comment", "new_status" => 1]);
 
         $response = $this->post("api/tickets/{$ticket->id}/comments", [
@@ -211,7 +211,7 @@ class SimpleTicketTest extends TestCase
     /** @test */
     public function requester_can_comment_the_ticket_with_js_injection(){
         Notification::fake();
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
         $ticket->comments()->create(["body" => "first comment", "new_status" => 1]);
 
         $response = $this->post("api/tickets/{$ticket->id}/comments", [
@@ -230,7 +230,7 @@ class SimpleTicketTest extends TestCase
     /** @test */
     public function commenting_a_closed_ticket_reopens_it(){
         Notification::fake();
-        $ticket = factory(Ticket::class)->create(["status" => Ticket::STATUS_SOLVED]);
+        $ticket = Ticket::factory()->create(["status" => Ticket::STATUS_SOLVED]);
 
         $response = $this->post("api/tickets/{$ticket->id}/comments", [
             "body" => "this is a comment"
@@ -248,8 +248,8 @@ class SimpleTicketTest extends TestCase
     public function can_assign_ticket_to_user(){
         Notification::fake();
 
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $this->assertNull( $ticket->user );
         $response = $this->post("api/tickets/{$ticket->id}/assign", ["user" => $user->id], ["token" => 'the-api-token']);
@@ -268,7 +268,7 @@ class SimpleTicketTest extends TestCase
 
     /** @test */
     public function a_ticket_can_be_updated(){
-        $ticket = factory(Ticket::class)->create();
+        $ticket = Ticket::factory()->create();
         $this->assertEquals($ticket->status, Ticket::STATUS_NEW);
 
         $this->put("api/tickets/{$ticket->id}", ["status" => Ticket::STATUS_PENDING] ,["token" => 'the-api-token']);
@@ -278,7 +278,7 @@ class SimpleTicketTest extends TestCase
 
     /** @test */
     public function a_ticket_created_by_the_same_requester_is_added_to_him(){
-        $requester = factory(Requester::class)->create([
+        $requester = Requester::factory()->create([
             "name"  => "Bruce Wayne",
             "email" => "bruce@wayne.com"
         ]);

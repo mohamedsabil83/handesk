@@ -30,8 +30,8 @@ class LeadsTest extends TestCase
         $mailChimpFake = new MailchimpFake();
         app()->instance(Mailchimp::class, $mailChimpFake);
 
-        $admin      = factory(Admin::class)->create();
-        $nonAdmin   = factory(User::class)->create(["admin" => 0]);
+        $admin      = Admin::factory()->create();
+        $nonAdmin   = User::factory()->create(["admin" => 0]);
 
         $response = $this->post('api/leads',[
             "email"       => "bruce@wayne.com",
@@ -92,7 +92,7 @@ class LeadsTest extends TestCase
 
     /** @test */
     public function creating_a_lead_that_email_already_exists_only_adds_the_tags(){
-        $lead = factory(Lead::class)->create(["email" => "bruce@wayne.com"]);
+        $lead = Lead::factory()->create(["email" => "bruce@wayne.com"]);
         $response = $this->post('api/leads',[
             "email"    => "bruce@wayne.com",
             "username" => "brucewayne",

@@ -26,8 +26,8 @@ class KpisTest extends TestCase
 
     /** @test */
     public function avg_time_to_first_reply_is_calculated_for_user(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create(["created_at" => Carbon::parse("-5 minutes")]);
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create(["created_at" => Carbon::parse("-5 minutes")]);
 
         $firstReplyKpi = new FirstReplyKpi;
 
@@ -43,13 +43,13 @@ class KpisTest extends TestCase
         $ticket->addComment($user, "A second comment"); //Second comment should not count for the KPI
         $this->assertEquals(5, $firstReplyKpi->forUser($user) );
 
-        $ticket = factory(Ticket::class)->create(["created_at" => Carbon::parse("-10 minutes")]);
+        $ticket = Ticket::factory()->create(["created_at" => Carbon::parse("-10 minutes")]);
         $ticket->addComment($user, "Another comment");
 
         $this->assertEquals(7.5, $firstReplyKpi->forUser($user) );
 
-        $user2   = factory(User::class)->create();
-        $ticket2 = factory(Ticket::class)->create(["created_at" => Carbon::parse("-15 minutes")]);
+        $user2   = User::factory()->create();
+        $ticket2 = Ticket::factory()->create(["created_at" => Carbon::parse("-15 minutes")]);
         $ticket2->addComment($user2, "Another comment");
 
         $this->assertEquals(15, $firstReplyKpi->forUser($user2) );
@@ -57,10 +57,10 @@ class KpisTest extends TestCase
 
     /** @test */
     public function average_first_reply_time_is_calculated_for_team(){
-        $user   = factory(User::class)->create();
-        $team   = factory(Team::class)->create();
+        $user   = User::factory()->create();
+        $team   = Team::factory()->create();
         $ticket = $team->tickets()->create(
-            factory(Ticket::class)->make(["created_at" => Carbon::parse("-5 minutes")])->toArray()
+            Ticket::factory()->make(["created_at" => Carbon::parse("-5 minutes")])->toArray()
         );
 
         $ticket->addComment($user, "A second comment"); //Second comment should not count for the KPI
@@ -69,8 +69,8 @@ class KpisTest extends TestCase
 
     /** @test */
     public function can_get_the_first_reply_average_for_all(){
-        $user1  = factory(User::class)->create();
-        $user2  = factory(User::class)->create();
+        $user1  = User::factory()->create();
+        $user2  = User::factory()->create();
         FirstReplyKpi::obtain( Carbon::today(),         $user1->id, Kpi::TYPE_USER )->addValue( 5 );
         FirstReplyKpi::obtain( Carbon::today(),         $user1->id, Kpi::TYPE_USER )->addValue( 10 );
         FirstReplyKpi::obtain( Carbon::yesterday(),     $user1->id, Kpi::TYPE_USER )->addValue( 20 );
@@ -84,8 +84,8 @@ class KpisTest extends TestCase
 
     /** @test */
     public function average_solve_time_is_calculated_for_user(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create(["created_at" => Carbon::parse("-5 minutes")]);
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create(["created_at" => Carbon::parse("-5 minutes")]);
         $solveKpi = new SolveKpi;
 
         $ticket->addComment(null, "A requester comment");   //A requester comment should not apply
@@ -100,8 +100,8 @@ class KpisTest extends TestCase
 
     /** @test */
     public function solve_time_is_calculated_when_only_updating_the_status(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create(["created_at" => Carbon::parse("-5 minutes")]);
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create(["created_at" => Carbon::parse("-5 minutes")]);
 
         $ticket->addComment($user, null, Ticket::STATUS_SOLVED);
 
@@ -110,10 +110,10 @@ class KpisTest extends TestCase
 
     /** @test */
     public function average_solve_time_is_calculated_for_team(){
-        $user   = factory(User::class)->create();
-        $team   = factory(Team::class)->create();
+        $user   = User::factory()->create();
+        $team   = Team::factory()->create();
         $ticket = $team->tickets()->create(
-            factory(Ticket::class)->make(["created_at" => Carbon::parse("-5 minutes")])->toArray()
+            Ticket::factory()->make(["created_at" => Carbon::parse("-5 minutes")])->toArray()
         );
 
         $ticket->addComment($user, "A second comment", Ticket::STATUS_SOLVED); //Second comment should not count for the KPI
@@ -122,10 +122,10 @@ class KpisTest extends TestCase
 
     /** @test */
     public function one_touch_ratio_is_calculated_for_user(){
-        $user       = factory(User::class)->create();
-        $ticket1    = factory(Ticket::class)->create();
-        $ticket2    = factory(Ticket::class)->create();
-        $ticket3    = factory(Ticket::class)->create();
+        $user       = User::factory()->create();
+        $ticket1    = Ticket::factory()->create();
+        $ticket2    = Ticket::factory()->create();
+        $ticket3    = Ticket::factory()->create();
 
         $ticket1->addComment($user, "A requester comment", Ticket::STATUS_OPEN);
         $ticket1->addComment($user, "A requester comment", Ticket::STATUS_SOLVED);   //No one touch resolution
@@ -140,10 +140,10 @@ class KpisTest extends TestCase
 
     /** @test */
     public function reopened_ratio_is_calculated_for_user(){
-        $user       = factory(User::class)->create();
-        $ticket1    = $user->tickets()->create( factory(Ticket::class)->make()->toArray() );
-        $ticket2    = $user->tickets()->create( factory(Ticket::class)->make()->toArray() );
-        $ticket3    = $user->tickets()->create( factory(Ticket::class)->make()->toArray() );
+        $user       = User::factory()->create();
+        $ticket1    = $user->tickets()->create( Ticket::factory()->make()->toArray() );
+        $ticket2    = $user->tickets()->create( Ticket::factory()->make()->toArray() );
+        $ticket3    = $user->tickets()->create( Ticket::factory()->make()->toArray() );
 
         $ticket1->addComment($user, "A requester comment",  Ticket::STATUS_SOLVED);
         $ticket1->addComment(null, "A requester comment",   Ticket::STATUS_OPEN);

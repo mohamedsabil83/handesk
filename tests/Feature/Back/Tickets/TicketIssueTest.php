@@ -33,8 +33,8 @@ class TicketIssueTest extends TestCase
     /** @test */
     public function can_create_issue_from_ticket(){
         Notification::fake();
-        $user   = factory(User::class)->states(["admin"])->create();
-        $ticket = factory(Ticket::class)->create([
+        $user   = User::factory()->tates(["admin"])->create();
+        $ticket = Ticket::factory()->create([
             "subject" => "subject",
             "summary" => "summary",
         ]);
@@ -52,8 +52,8 @@ class TicketIssueTest extends TestCase
 
     /** @test */
     public function non_admin_cannot_create_issue_from_ticket(){
-        $user   = factory(User::class)->create();
-        $ticket = factory(Ticket::class)->create();
+        $user   = User::factory()->create();
+        $ticket = Ticket::factory()->create();
 
         $response = $this->actingAs($user)->post("tickets/{$ticket->id}/issue",[
             "repository" => "test/repo"
@@ -65,8 +65,8 @@ class TicketIssueTest extends TestCase
     /** @test */
     public function issue_can_not_be_created_twice(){
         Notification::fake();
-        $user   = factory(User::class)->states(["admin"])->create();
-        $ticket = factory(Ticket::class)->create([
+        $user   = User::factory()->tates(["admin"])->create();
+        $ticket = Ticket::factory()->create([
             "subject" => "subject",
             "summary" => "summary",
         ]);

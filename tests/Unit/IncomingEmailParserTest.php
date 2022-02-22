@@ -31,9 +31,9 @@ class IncomingEmailParserTest extends TestCase{
 
     /** @test */
     public function comment_parser_returns_null_user_if_is_the_requester() {
-        $user = factory(User::class)->create(["email" => "james@bond.com"]);
-        $requester = factory(Requester::class)->create(["email" => "james@bond.com"]);
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id]);
+        $user = User::factory()->create(["email" => "james@bond.com"]);
+        $requester = Requester::factory()->create(["email" => "james@bond.com"]);
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id]);
         $parser1 = new IncomingMailCommentParser(new FakeIncomingMail(["name" => "Bruce Wayne", "email" => "james@bond.com"], "I'm batman", "##- Please type your reply above this line -## ticket-id:1."));
 
         $this->assertNull($parser1->getUser($ticket));
@@ -41,9 +41,9 @@ class IncomingEmailParserTest extends TestCase{
 
     /** @test */
     public function comment_parser_returns_the_user_if_it_is_not_the_requester() {
-        $user = factory(User::class)->create(["email" => "bruce@wayne.com"]);
-        $requester = factory(Requester::class)->create(["email" => "james@bond.com"]);
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id]);
+        $user = User::factory()->create(["email" => "bruce@wayne.com"]);
+        $requester = Requester::factory()->create(["email" => "james@bond.com"]);
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id]);
         $parser1 = new IncomingMailCommentParser(new FakeIncomingMail(["name" => "Bruce Wayne", "email" => "bruce@wayne.com"], "I'm batman", "##- Please type your reply above this line -## ticket-id:1."));
 
         $this->assertEquals("bruce@wayne.com", $parser1->getUser($ticket)->email);
@@ -51,8 +51,8 @@ class IncomingEmailParserTest extends TestCase{
 
     /** @test */
     public function comment_parser_returns_null_if_it_is_an_unknown_email() {
-        $requester = factory(Requester::class)->create(["email" => "james@bond.com"]);
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id]);
+        $requester = Requester::factory()->create(["email" => "james@bond.com"]);
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id]);
         $parser1 = new IncomingMailCommentParser(new FakeIncomingMail(["name" => "Bruce Wayne", "email" => "unkown@bond.com"], "I'm batman", "##- Please type your reply above this line -## ticket-id:1."));
 
         $this->assertNull($parser1->getUser($ticket));

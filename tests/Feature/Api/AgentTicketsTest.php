@@ -20,7 +20,7 @@ class AgentTicketsTest extends TestCase
     /** @test */
     public function can_login()
     {
-        factory(User::class)->create(['email' => 'admin@handesk.io', 'password' => bcrypt('the-password'), 'token' => 'agent-token', 'admin' => true]);
+        User::factory()->create(['email' => 'admin@handesk.io', 'password' => bcrypt('the-password'), 'token' => 'agent-token', 'admin' => true]);
 
         $response = $this->post("api/agent/login", ["email" => 'admin@handesk.io', 'password' => 'the-password']);
 
@@ -33,11 +33,11 @@ class AgentTicketsTest extends TestCase
 
     /** @test */
     public function can_get_all_open_tickets(){
-        factory(User::class)->create(['token' => 'agent-token', 'admin' => true]);
-        $requester = factory(Requester::class)->create(["name" => "requesterName" ]);
-        factory(Ticket::class,3)->create(["requester_id" => $requester->id]);
-        factory(Ticket::class,2)->create(["requester_id" => $requester->id, "status" => Ticket::STATUS_SOLVED]);
-        factory(Ticket::class,2)->create();
+        User::factory()->create(['token' => 'agent-token', 'admin' => true]);
+        $requester = Requester::factory()->create(["name" => "requesterName" ]);
+        Ticket::factory()->count(3)->create(["requester_id" => $requester->id]);
+        Ticket::factory()->count(2)->create(["requester_id" => $requester->id, "status" => Ticket::STATUS_SOLVED]);
+        Ticket::factory()->count(2)->create();
 
         $response = $this->get("api/agent/tickets", ["token" => 'agent-token']);
 
@@ -55,10 +55,10 @@ class AgentTicketsTest extends TestCase
     /** @test */
     public function can_get_ticket_comments()
     {
-        factory(User::class)->create(['token' => 'agent-token', 'admin' => true]);
-        $requester = factory(Requester::class)->create(["name" => "requesterName" ]);
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id]);
-        factory(Comment::class, 3)->create(['ticket_id' => $ticket->id]);
+        User::factory()->create(['token' => 'agent-token', 'admin' => true]);
+        $requester = Requester::factory()->create(["name" => "requesterName" ]);
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id]);
+        Comment::factory()->count(3)->create(['ticket_id' => $ticket->id]);
 
         $response = $this->get("api/agent/tickets/{$ticket->id}/comments", ["token" => 'agent-token']);
 
@@ -73,16 +73,16 @@ class AgentTicketsTest extends TestCase
     public function can_comment_a_ticket()
     {
         Notification::fake();
-        factory(User::class)->create(['token' => 'agent-token', 'admin' => true]);
-        $requester = factory(Requester::class)->create(["name" => "requesterName" ]);
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id]);
-        factory(Comment::class, 3)->create(['ticket_id' => $ticket->id]);
+        User::factory()->create(['token' => 'agent-token', 'admin' => true]);
+        $requester = Requester::factory()->create(["name" => "requesterName" ]);
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id]);
+        Comment::factory()->count(3)->create(['ticket_id' => $ticket->id]);
 
         $response = $this->post("api/agent/tickets/{$ticket->id}/comments", ["body" => "hello baby", "private" => false], ["token" => 'agent-token']);
 
         $response->assertJsonStructure([
             "data" => [
-                "id" 
+                "id"
             ]
         ]);
 
@@ -95,16 +95,16 @@ class AgentTicketsTest extends TestCase
     public function can_comment_a_ticket_as_note()
     {
         Notification::fake();
-        factory(User::class)->create(['token' => 'agent-token', 'admin' => true]);
-        $requester = factory(Requester::class)->create(["name" => "requesterName" ]);
-        $ticket = factory(Ticket::class)->create(["requester_id" => $requester->id]);
-        factory(Comment::class, 3)->create(['ticket_id' => $ticket->id]);
+        User::factory()->create(['token' => 'agent-token', 'admin' => true]);
+        $requester = Requester::factory()->create(["name" => "requesterName" ]);
+        $ticket = Ticket::factory()->create(["requester_id" => $requester->id]);
+        Comment::factory()->count(3)->create(['ticket_id' => $ticket->id]);
 
         $response = $this->post("api/agent/tickets/{$ticket->id}/comments", ["body" => "hello baby", "private" => true], ["token" => 'agent-token']);
 
         $response->assertJsonStructure([
             "data" => [
-                "id" 
+                "id"
             ]
         ]);
 
