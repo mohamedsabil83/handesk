@@ -10,14 +10,15 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "axios": "^0.21",
-        "bootstrap-sass": "^3.3.7",
-        "cross-env": "^5.0.1",
-        "jquery": "^3.1.1",
-        "laravel-mix": "^6.0.6",
-        "less": "^2.7.2",
-        "less-loader": "^4.0.5",
-        "lodash": "^4.17.19",
-        "postcss": "^8.1.14"
+        "axios": "^0.26",
+        "bootstrap-sass": "^3.4.1",
+        "cross-env": "^7.0.3",
+        "jquery": "^3.6.0",
+        "laravel-mix": "^6.0.43",
+        "less": "^4.1.2",
+        "less-loader": "^10.2.0",
+        "lodash": "^4.17.21",
+        "postcss": "^8.4.6",
+        "webpack-cli": "^4.9.2"
     }
 }

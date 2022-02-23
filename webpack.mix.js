@@ -15,7 +15,7 @@ const mix = require('laravel-mix');
 //
 // ]);
 
-mix.babel(
+mix.js(
     [
         //'resources/js/app.js',
         'vendor/badchoice/thrust/src/resources/js/thrust.min.js',
@@ -25,7 +25,7 @@ mix.babel(
         'resources/js/libs/mention.js/mention.js', //https://github.com/ivirabyan/jquery-mentions
     ],
     'public/js/app.js',
-)
-    .babel('resources/js/moment.min.js', 'public/js/moment.js')
-    .less('resources/less/style.less', '../resources/css/style.css')
-    .styles(['resources/css/libs/jquery.tagsinput.min.css', 'resources/css/style.css'], 'public/css/all.css');
+).js('resources/js/moment.min.js', 'public/js/moment.js');
+
+mix.less('resources/less/style.less', '../resources/css/style.css');
+mix.styles(['resources/css/libs/jquery.tagsinput.min.css', 'resources/css/style.css'], 'public/css/all.css');
