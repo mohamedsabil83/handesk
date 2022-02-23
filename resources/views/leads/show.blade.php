@@ -7,7 +7,7 @@
         <h3> {{ $lead->company }} · {{ $lead->name }} · {{ $lead->email }} </h3>
         @busy <span class="label lead-status-{{ $lead->statusName() }}"> {{ __("lead." . $lead->statusName() ) }} </span> &nbsp;
         <span class="date">{{  $lead->created_at->diffForHumans() }} · {{  nameOrDash($lead->team) }}</span>
-        <a class="float-right button secondary mr4 mt-4 mb-5" href="{{ route('leads.tasks.index', $lead) }}"> @icon(tasks) {{ trans_choice('lead.task', 2) }} <span class="label lead-status-failed">{{ $lead->uncompletedTasks->count() }}</span></a>
+        <a class="float-right button secondary mr4 mt-4 mb-5" href="{{ route('leads.tasks.index', $lead) }}"> @icon(tasks fas) {{ trans_choice('lead.task', 2) }} <span class="label lead-status-failed">{{ $lead->uncompletedTasks->count() }}</span></a>
     </div>
 
     <div class="description comment">
@@ -25,8 +25,8 @@
         @include('components.uploadAttachment', ["attachable" => $lead, "type" => "leads"])
         {{ Form::hidden("new_status", $lead->status, ["id" => "new_status"]) }}
 
-        <button class="mt1 uppercase ph3"> @icon(comment) {{ __('ticket.commentAs') }} {{ __("lead." . $lead->statusName()) }}</button>
-        <span class="dropdown button caret-down"> @icon(caret-down) </span>
+        <button class="mt1 uppercase ph3"> @icon(comment fas) {{ __('ticket.commentAs') }} {{ __("lead." . $lead->statusName()) }}</button>
+        <span class="dropdown button caret-down"> @icon(caret-down fas) </span>
         <ul class="dropdown-container">
             @foreach(App\Lead::availableStatus() as $value => $status)
                 <li><a class="pointer" onClick="setStatusAndSubmit( {{ $value    }} )"><div style="width:10px; height:10px" class="circle inline lead-status-{{$status}} mr1"></div> {{ __('ticket.commentAs') }} <b>{{ __("lead.$status") }}   </b> </a></li>

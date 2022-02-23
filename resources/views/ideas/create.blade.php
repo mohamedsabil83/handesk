@@ -26,7 +26,7 @@
             <tr><td>{{ __('idea.repository') }}: </td><td>
                     {{ Form::select("repository", array_merge(["" => "--"], array_flip(config('issues.repositories')))) }}
             </td>
-            <tr><td><button class="uppercase ph3 ml1"> @icon(comment) {{ __('ticket.new') }}</button> </td></tr>
+            <tr><td><button class="uppercase ph3 ml1"> @icon(comment fas) {{ __('ticket.new') }}</button> </td></tr>
         </table>
         {{ Form::close() }}
     </div>

@@ -3,12 +3,12 @@
     @busy <span class="label ticket-priority-{{ $ticket->priorityName() }}">{{ __("ticket." . $ticket->priorityName() ) }}</span> &nbsp;
     @busy <span class="label" style="background-color:{{$ticket->type->color ?? "white"}}"> {{ $ticket->type->name ?? "--" }}</span>
     <span class="date">{{  $ticket->created_at->diffForHumans() }} · {{  $ticket->requester->name }} &lt;{{$ticket->requester->email}}&gt;</span>
-    <button class="ternary" onClick="$('#ticket-info').hide(); $('#ticket-edit').show()">@icon(pencil)</button>
+    <button class="ternary" onClick="$('#ticket-info').hide(); $('#ticket-edit').show()">@icon(pencil fas)</button>
     <div class="mt2">
         <span>{{ $ticket->subject }}</span><br>
         <p>{{ $ticket->summary }}</p>
     </div>
-    {{--<a class="ml4" title="Public Link" href="{{route('requester.tickets.show',$ticket->public_token)}}"> @icon(globe) </a>--}}
+    {{--<a class="ml4" title="Public Link" href="{{route('requester.tickets.show',$ticket->public_token)}}"> @icon(globe fas) </a>--}}
 </div>
 <div id="ticket-edit" class="hidden" class="">
 {{ Form::open(["url" => route("tickets.update", $ticket) ,"method" => "PUT"]) }}

@@ -12,7 +12,7 @@
 
         @can('update', $idea)
             <div class="float-right mt-4 mr4 ml-3">
-                <a class="button secondary mr4 fs2" href="{{route('ideas.edit', $idea)}}"> @icon(pencil) {{ __('idea.edit') }} </a>
+                <a class="button secondary mr4 fs2" href="{{route('ideas.edit', $idea)}}"> @icon(pencil fas) {{ __('idea.edit') }} </a>
                 @include('components.idea.issue')
             </div>
         @endcan

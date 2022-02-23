@@ -21,7 +21,7 @@
                         ({{ $idea->score() }}) {{ $idea->repositoryName() }}
                     </div>
                     @if($idea->due_date)
-                        <div class="gray mt-3 float-right">@icon(clock-o) {{ $idea->due_date }}</div>
+                        <div class="gray mt-3 float-right">@icon(clock-o fas) {{ $idea->due_date }}</div>
                     @endif
                 </div>
             @endforeach

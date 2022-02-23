@@ -16,7 +16,7 @@
                     {{ route('register') }}?team_token={{$team->token}}
                 </a>
             </div>
-            <button class="pointer" onclick="copyToClipboard('#register-link')">@icon(clipboard) Copy to clipboard</button>
+            <button class="pointer" onclick="copyToClipboard('#register-link')">@icon(clipboard fas) Copy to clipboard</button>
         </div>
     </div>
 @endsection

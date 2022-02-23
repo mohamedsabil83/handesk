@@ -27,7 +27,7 @@
                     App\Ticket::STATUS_OPEN     => __("ticket.open"),
                     App\Ticket::STATUS_PENDING  => __("ticket.pending"),
                 ]) }}
-                <button class="uppercase ph3 ml1"> @icon(comment) {{ __('ticket.new') }}</button> </td>
+                <button class="uppercase ph3 ml1"> @icon(comment fas) {{ __('ticket.new') }}</button> </td>
             </tr>
         </table>
         {{ Form::close() }}

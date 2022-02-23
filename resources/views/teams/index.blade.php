@@ -6,7 +6,7 @@
 
     @if(auth()->user()->admin)
         <div class="m4">
-            <a class="button " href="{{ route("teams.create") }}">@icon(plus) {{ __('team.new') }}</a>
+            <a class="button " href="{{ route("teams.create") }}">@icon(plus fas) {{ __('team.new') }}</a>
         </div>
     @endif
 
@@ -30,20 +30,20 @@
                 <td> {{ $team->name }}</td>
                 <td> <a href="mailto:{{ $team->email }}">{{ $team->email }}</a></td>
                 <td> <a href="{{route('teams.agents',$team)}}">{{ $team->members->count() }}</a></td>
-                <td> @if($team->slack_webhook_url) @icon(check) @else @icon(times) @endif </td>
+                <td> @if($team->slack_webhook_url) @icon(check fas) @else @icon(times fas) @endif </td>
                 @can('administrate', $team)
                     <td>
                         <a href="{{route('membership.store',$team->token)}}"> {{ __("team.invitationLink") }}</a>
                         <div class="hidden" id="register-link-{{$team->id}}"> {{ route('membership.store',$team->token)}} </div>
-                        <a class="ml2 pointer" onclick="copyToClipboard('#register-link-{{$team->id}}')">@icon(clipboard)</a>
+                        <a class="ml2 pointer" onclick="copyToClipboard('#register-link-{{$team->id}}')">@icon(clipboard fas)</a>
                     </td>
                 @else
                     <td></td>
                 @endcan
-                <th> <a href="{{route('tickets.index')}}?team={{$team->id}}"> @icon(inbox) </a></th>
-                <th> <a href="{{route('leads.index')}}?team={{$team->id}}"> @icon(dot-circle-o) </a></th>
+                <th> <a href="{{route('tickets.index')}}?team={{$team->id}}"> @icon(inbox fas) </a></th>
+                <th> <a href="{{route('leads.index')}}?team={{$team->id}}"> @icon(dot-circle-o fas) </a></th>
                 @can('administrate', $team)
-                    <th> <a href="{{route('teams.edit',$team)}}"> @icon(pencil) </a></th>
+                    <th> <a href="{{route('teams.edit',$team)}}"> @icon(pencil fas) </a></th>
                 @endcan
             </tr>
         @endforeach

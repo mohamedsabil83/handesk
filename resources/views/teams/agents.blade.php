@@ -11,10 +11,10 @@
             <div>
                 <a href="{{route('membership.store',$team->token)}}"> {{route('membership.store',$team->token)}} </a>
                 <div class="hidden" id="register-link-{{$team->id}}"> {{ route('membership.store',$team->token)}} </div>
-                <a class="ml2 pointer button" onclick="copyToClipboard('#register-link-{{$team->id}}')">@icon(clipboard) Copy to clipboard</a>
+                <a class="ml2 pointer button" onclick="copyToClipboard('#register-link-{{$team->id}}')">@icon(clipboard fas) Copy to clipboard</a>
                 &nbsp; or
                 <div class="hidden" id="register-link2-{{$team->id}}"> {{ route('register') }}?team_token={{$team->token}} </div>
-                <a class="ml2 pointer button" onclick="copyToClipboard('#register-link2-{{$team->id}}')">@icon(clipboard) Copy the register link to clipboard</a>
+                <a class="ml2 pointer button" onclick="copyToClipboard('#register-link2-{{$team->id}}')">@icon(clipboard fas) Copy the register link to clipboard</a>
             </div>
         </div>
     @endcan

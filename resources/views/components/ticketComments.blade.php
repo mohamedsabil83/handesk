@@ -8,7 +8,7 @@
                     <div class="pt1">{{ $comment->author()->name }} · {{ $comment->created_at->diffForHumans() }}</div>
                 </div>
                 <div>
-                    @if($comment->private) @icon(sticky-note-o) @endif
+                    @if($comment->private) @icon(sticky-note-o fas) @endif
                     {!! nl2br( strip_tags($comment->body)) !!}
                 </div>
                 @include('components.attachments', ["attachments" => $comment->attachments])

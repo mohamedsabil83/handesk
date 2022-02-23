@@ -1,4 +1,4 @@
-<h4> @icon(dot-circle-o) {{ trans_choice('lead.lead', 2) }}</h4>
+<h4> @icon(dot-circle-o fas) {{ trans_choice('lead.lead', 2) }}</h4>
 <ul>
     @php ( $repository = new App\Repositories\LeadsRepository )
     @include('components.sidebarItem', ["url" => route('leads.index'). "?all=true",         "title" => trans_choice('lead.lead',        2), "count" => $repository->all()           ->count()] )

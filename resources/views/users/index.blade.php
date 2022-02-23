@@ -22,8 +22,8 @@
                 <td> {{ $user->name }}</td>
                 <td> {{ $user->email }}</td>
                 <td> {{ implode(", ", $user->teams->pluck('name')->toArray() ) }}</td>
-                <td> <a href="{{ route('users.impersonate', $user) }}"> @icon(key) </a></td>
-                <td> <a href="{{ route('users.destroy', $user) }}" class="delete-resource"> @icon(trash)</a></td>
+                <td> <a href="{{ route('users.impersonate', $user) }}"> @icon(key fas) </a></td>
+                <td> <a href="{{ route('users.destroy', $user) }}" class="delete-resource"> @icon(trash fas)</a></td>
             </tr>
         @endforeach
         </tbody>

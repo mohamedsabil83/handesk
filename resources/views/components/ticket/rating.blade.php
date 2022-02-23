@@ -1,9 +1,9 @@
 @if($ticket->rating)
     @for($i = 0; $i < 5; $i++)
         @if($ticket->rating > $i)
-            @icon(star)
+            @icon(star fas)
         @else
-            @icon(star-o)
+            @icon(star-o fas)
         @endif
     @endfor
 @endif

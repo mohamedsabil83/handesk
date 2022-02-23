@@ -13,7 +13,7 @@
 
 
     @if (auth()->user()->can_see_reports)
-    <h4> @icon(bar-chart) {{ trans_choice('report.report', 2) }}</h4>
+    <h4> @icon(bar-chart fas) {{ trans_choice('report.report', 2) }}</h4>
     <ul>
             @include('components.sidebarItem', ["url" => route('reports.index'), "title" => trans_choice('report.report', 2) ])
             @include('components.sidebarItem', ["url" => route('reports.analytics'), "title" => trans_choice('report.analytics', 1) ])
@@ -21,7 +21,7 @@
     @endif
 
 
-    <h4> @icon(cog) {{ trans_choice('admin.admin',2) }}</h4>
+    <h4> @icon(cog fas) {{ trans_choice('admin.admin',2) }}</h4>
     <ul>
         @include('components.sidebarItem', ["url" => route('teams.index'),      "title" => trans_choice('team.team',        2) ])
         @if(auth()->user()->admin)

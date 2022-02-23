@@ -5,7 +5,7 @@
     </div>
 
     <div class="m4">
-        <a class="button " href="{{ route("ideas.create") }}">@icon(plus) {{ __('idea.new') }}</a>
+        <a class="button " href="{{ route("ideas.create") }}">@icon(plus fas) {{ __('idea.new') }}</a>
     </div>
 
     @paginator($ideas)
@@ -34,7 +34,7 @@
                 <td> {{ $idea->created_at->diffForHumans() }}</td>
                 <td>
                     @can('update', $idea)
-                        <a href="{{route('ideas.edit', $idea)}}">@icon(pencil)</a>
+                        <a href="{{route('ideas.edit', $idea)}}">@icon(pencil fas)</a>
                     @endcan
                 </td>
             </tr>

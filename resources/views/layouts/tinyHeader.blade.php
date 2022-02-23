@@ -3,7 +3,7 @@
     <a href="{{route('profile.show')}}"><button class="ternary fs2">{{ auth()->user()->name }}</button></a>
     <div class="float-right ml3">
         {{ Form::open(["url" => route('logout')]) }}
-        <button class="ternary fs2">@icon(sign-out)</button>
+        <button class="ternary fs2">@icon(sign-out fas)</button>
         {{ Form::close() }}
     </div>
 </div>

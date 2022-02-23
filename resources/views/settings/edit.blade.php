@@ -12,7 +12,7 @@
         <tr>
             <td>Api token:</td>
             <td> <span id="api-token">{{ config('handesk.api_token') }}</span> <button class="ml2" onclick="copyToClipboard('#api-token')">
-                    @icon(clipboard) Copy to clipboard</button></td>
+                    @icon(clipboard fas) Copy to clipboard</button></td>
         </tr>
         {{ Form::open(["url" => route('settings.update',$settings), "method" => "PUT"]) }}
         <tr>
@@ -23,12 +23,12 @@
             <td>{{ __("setting.default_team_id") }}: </td>
             <td class="w60">
                 <select name="default_team_id">
-                    <option value="">NONE</option> 
+                    <option value="">NONE</option>
                     @foreach ($teams as $team)
-                    <option value="{{$team->id}}" @if($settings->default_team_id==$team->id) selected @endif>{{$team->id}} - {{$team->name}}</option>    
+                    <option value="{{$team->id}}" @if($settings->default_team_id==$team->id) selected @endif>{{$team->id}} - {{$team->name}}</option>
                     @endforeach
                 </select>
-                
+
             </td>
         </tr>
         <tr>

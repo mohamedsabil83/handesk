@@ -12,7 +12,7 @@
         {{ Form::open(["url" => route('leads.tasks.store',$lead)]) }}
         <input name="body" placeholder="{{trans_choice('lead.task',1)}}">
         <input type=date name="datetime">
-        <button> @icon(plus) {{ __('ticket.new') }}</button>
+        <button> @icon(plus fas) {{ __('ticket.new') }}</button>
         {{ Form::close() }}
     </div>
 
@@ -43,7 +43,7 @@
                 </td>
                 <td>
                     {{ Form::open(["url" => route('tasks.destroy', $task), 'method' => "DELETE"]) }}
-                    <button class="ternary fs3"> @icon(trash) </button>
+                    <button class="ternary fs3"> @icon(trash fas) </button>
                     {{ Form::close() }}
                 </td>
             </tr>
